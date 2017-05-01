@@ -3,6 +3,7 @@ Author: Christopher Forsythe
 Date: April 30th, 2017
 
 Abstract
+
 This program can brute force a string that is encrypted with a ceasar cipher using a dictionary of most common words
 
 In Depth
