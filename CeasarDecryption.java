@@ -20,8 +20,8 @@ import javafx.stage.Stage;
 
 public class CeasarDecryption extends Application{
 	
-	Map<String, Integer> commonWords = new HashMap<String, Integer>();
-	int key = 0;
+	Map<String, Integer> commonWords = new HashMap<String, Integer>(); //map of 354k words
+	int key = 0; //final value of key gets set here
 	public void fillMap(Map<String, Integer> commonWords)
 	{
 	URL path = CeasarDecryption.class.getResource("mostCommonWords.txt");
@@ -91,7 +91,10 @@ public class CeasarDecryption extends Application{
 		
 	}
 	if(biggestCount < wordCount(encrypted))
+		{
+		key = 0;
 		return encrypted;
+		}
 	return decryptWithKey(encrypted);
 	}
 	public String decryptWithKey(String encrypted)
@@ -119,6 +122,7 @@ public class CeasarDecryption extends Application{
 		decrypted += letter;
 		}
 		}
+	key = 26 - key;
 	return decrypted;
 	}
 	public static void main(String[] args)
