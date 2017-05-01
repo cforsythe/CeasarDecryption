@@ -42,10 +42,84 @@ public class CeasarDecryption extends Application{
 		System.out.println("Error reading file");
 	}
 	}
+	public int wordCount(String test)
+	{
+		int count = 0;
+		String[] wordArray = test.split("\\s+");
+		for(int i = 0; i < wordArray.length; i++)
+		{
+			if(commonWords.containsKey(wordArray[i].toLowerCase()))
+				count++;
+		}
+		return count;
+	}
 	public String decryptText(String encrypted)
 	{
-	System.out.println("Nothing");
-	return "";
+	String temp = "";
+	int biggestCount = 0;
+	for(int i = 1; i < 26; i++)
+	{
+		for(int ii = 0; ii < encrypted.length();ii++)
+		{
+		char letter = encrypted.charAt(ii);
+		if(letter >= 'A' && letter <= 'Z')
+			{
+			letter = (char)((letter + i) % 91);
+			if(letter < 65)
+				letter += 65;
+			temp += (char)letter;
+			}
+		else if(letter >= 'a' && letter <= 'z')
+			{
+			letter = (char)((letter + i) % 123);
+			if(letter < 97)
+				letter += 97;
+			temp += (char)letter;
+			}
+		else if(letter == ' ')
+			{
+			temp += " ";
+			}
+		}
+		int count = wordCount(temp);
+		if(count > biggestCount)
+			{
+			biggestCount = count;
+			key = i;
+			}
+		temp = "";
+		
+	}
+	if(biggestCount < wordCount(encrypted))
+		return encrypted;
+	return decryptWithKey(encrypted);
+	}
+	public String decryptWithKey(String encrypted)
+	{
+	String decrypted = "";
+	for(int i = 0; i < encrypted.length(); i++)
+		{
+		char letter = encrypted.charAt(i);
+		if(letter >= 65 && letter <= 90)
+		{
+		letter = (char)((letter + this.key) % 91);
+		if(letter < 65)
+			letter += 65;
+		decrypted += (char)letter;
+		}
+	else if(letter >= 97 && letter <= 122)
+		{
+		letter = (char)((letter + this.key) % 123);
+		if(letter < 97)
+			letter += 97;
+		decrypted += (char)letter;
+		}
+	else
+		{
+		decrypted += letter;
+		}
+		}
+	return decrypted;
 	}
 	public static void main(String[] args)
 	{
@@ -77,6 +151,7 @@ public class CeasarDecryption extends Application{
 		Label decText = new Label("Decrypted text will show here");
 		decText.setPrefSize(350, 200);
 		decText.setAlignment(Pos.TOP_CENTER);
+		decText.setWrapText(true);
 		
 		Scene myScene = new Scene(rootNode, 400, 300);
 		rootNode.getChildren().addAll(inputBox, decrypt, decTitle, decKey, decText);
@@ -84,7 +159,17 @@ public class CeasarDecryption extends Application{
 		myStage.show();
 		
 		fillMap(commonWords);
-		decrypt.setOnAction(e -> decText.setText(decryptText(decrypt.getText())));
+		decrypt.setOnAction(new EventHandler<ActionEvent>() {
+
+			public void handle(ActionEvent ae) {
+				decText.setText(decryptText(inputBox.getText()));
+				decKey.setText("Key = " + Integer.toString(key));
+			}
+			
+			
+			
+			
+		});
 		
 	}
 }
