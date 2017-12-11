@@ -4,7 +4,7 @@ Date: April 30th, 2017
 
 Abstract
 
-This program can brute force a string that is encrypted with a ceasar cipher using a dictionary of most common words
+A program that can crack any caesar cipher encryption
 
 In Depth
 1) Take in an encrypted string through a text box
